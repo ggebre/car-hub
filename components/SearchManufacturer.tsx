@@ -8,7 +8,7 @@ import { SearchManufacturerProps } from "@/types"
 function SearchManufacturer({manufacturer, setManufacturer} : SearchManufacturerProps) {
   const [query, setQuery] = useState("");
   // filter those manufactures which match the query 
-  const filteredManufacturers = query === "" ? manufacturers : manufacturers.filter((item) => item.toLowerCase().replace(/\s+/g, "").includes(query.toLowerCase().replace(/\s+/g, "")))
+  const filteredManufacturers = query === "" ? manufacturers : manufacturers.filter((item) => item.toLowerCase().replace(/\s+/g, "").includes(query.toLowerCase().replace(/\s+/g, "")));
   return (
     <div className="search-manufacturer">
       <Combobox>
@@ -34,7 +34,16 @@ function SearchManufacturer({manufacturer, setManufacturer} : SearchManufacturer
          leaveTo="opacity-0"
          afterLeave={() => setQuery('')}>
           <Combobox.Options>
-
+            {/* auto completion => filter manufacturers list and display them in Combobox.option as matching with the query */}
+            { filteredManufacturers.map((item) => (
+                  <Combobox.Option 
+                    key={item}
+                    value={item}
+                    className={({active}) => `relative search-manufacturer__option ${active ? 'bg-primary-blue text-white' : 'text-gray-900'}`}>
+                          {item}
+                    </Combobox.Option>
+                ))
+            }
           </Combobox.Options>
 
          </Transition>
