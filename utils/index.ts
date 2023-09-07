@@ -24,7 +24,7 @@ export async function fetchCars() {
         highway_mpg: 35,
         make: "Toyota",
         model: "camry",
-        transmission: "stick shift",
+        transmission: "a",
         year: 1990,
     }]
 
