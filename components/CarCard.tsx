@@ -54,6 +54,7 @@ function CarCard({car} : CarCardProps) {
 
             </div>
         </div>
+        
     </div>
   )
 }
