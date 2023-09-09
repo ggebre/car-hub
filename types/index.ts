@@ -13,6 +13,11 @@ export interface CustomButtonProps {
 
 export interface CustomFilterProps {
     title: string;
+    options: OptionProps[];
+}
+export interface OptionProps {
+    title: string;
+    value: string;
 }
 
 export interface SearchManufacturerProps {
