@@ -1,19 +1,39 @@
-import Image from 'next/image'
+'use client'
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { Hero, SearchBar, CustomFilter, CarCard, ShowMore } from '@/components'
 import { fetchCars } from '@/utils'
 import { fuels, yearsOfProduction } from '@/constants';
 
-export default async function Home({ searchParams } : any ) {
-  
-  const allCars = await fetchCars({
-    manufacturer: searchParams.manufacturer || '', 
-    year: searchParams.year || 2022, 
-    fuel: searchParams.fuel || '',
-    limit: searchParams.limit || 10, 
-    model: searchParams.model || ''
-  });
-  const isDataEmpty = !Array.isArray(allCars) || allCars.length === 0 || !allCars;
+export default  function Home() {
+  const [allCars, setAllCars] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [manufacturer, useManufacturer] = useState('');
+  const [year, useYear] = useState(2022);
+  const [fuel, useFuel] = useState('');
+  const [limit, useLimit] = useState(10);
+  const [model, useModel] = useState('');
 
+  
+  const getCars = async () => {
+    setLoading(true);
+    try {
+      const result = await fetchCars({ manufacturer, year ,fuel,limit,model});
+      
+      setAllCars(result) 
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    
+    getCars();
+  }, [manufacturer, year, fuel, limit, model])
+  
+  const isDataEmpty = !Array.isArray(allCars) || allCars.length === 0 || !allCars;
+  
   return (
     <main className="overflow-hidden">
       <Hero />
@@ -38,8 +58,8 @@ export default async function Home({ searchParams } : any ) {
           ))}
           </div>
           <ShowMore 
-            pageNumber={(searchParams.limit || 10) / 10}
-            isNext={(searchParams.limit || 10) > allCars.length}/>
+            pageNumber={(limit || 10) / 10}
+            isNext={(limit || 10) > allCars.length}/>
         </section>) : (
           <div className='home__error-container'>
             <h2 className='text-black text-xl font-bold'>
